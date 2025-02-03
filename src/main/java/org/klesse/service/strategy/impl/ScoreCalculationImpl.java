@@ -1,6 +1,7 @@
 package org.klesse.service.strategy.impl;
 
 import lombok.AllArgsConstructor;
+import org.klesse.contants.MessageConstant;
 import org.klesse.domain.Proposal;
 import org.klesse.exceptions.StrategyException;
 import org.klesse.service.strategy.interfaces.Calculation;
@@ -23,8 +24,8 @@ public class ScoreCalculationImpl implements Calculation {
 
         int score = scoreProvider.getScore();
 
-        if (score <= MINIMUM_SCORE) {
-            throw new StrategyException("Does not have the minimum score.");
+        if (score < MINIMUM_SCORE) {
+            throw new StrategyException(String.format(MessageConstant.LOW_SCORE, proposal.getUsers().getName()));
         }
 
         return getScoreBasedOnThreshold(score);

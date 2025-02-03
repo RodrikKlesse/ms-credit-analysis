@@ -1,6 +1,7 @@
 package org.klesse.service.strategy.impl;
 
 import lombok.AllArgsConstructor;
+import org.klesse.contants.MessageConstant;
 import org.klesse.domain.Proposal;
 import org.klesse.exceptions.StrategyException;
 import org.klesse.service.strategy.interfaces.Calculation;
@@ -18,7 +19,7 @@ public class CreditDeniedImpl implements Calculation {
     @Override
     public int calculate(Proposal proposal) {
         if(creditCheckProvider.isCreditDenied()) {
-            throw new StrategyException("You do not have credit release");
+            throw new StrategyException(String.format(MessageConstant.CREDIT_DENIED, proposal.getUsers().getName()));
         }
         return 100;
     }

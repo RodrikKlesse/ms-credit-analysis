@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.klesse.domain.Proposal;
 import org.klesse.exceptions.StrategyException;
 import org.klesse.service.strategy.interfaces.Calculation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,23 +12,30 @@ import java.util.List;
 @Service
 public class CreditAnalysisService {
 
-    private List<Calculation> calculationList;
+    private final List<Calculation> calculationList;
+    private final RabbitNotificationService rabbitNotificationService;
+    private final String exchangeCompletedProposal;
 
-    public CreditAnalysisService(List<Calculation> calculationList) {
+    public CreditAnalysisService(List<Calculation> calculationList,
+                                 RabbitNotificationService rabbitNotificationService,
+                                 @Value("${rabbitmq.completedproposal.exchange}") String exchangeCompletedProposal) {
         this.calculationList = calculationList;
+        this.rabbitNotificationService = rabbitNotificationService;
+        this.exchangeCompletedProposal = exchangeCompletedProposal;
     }
 
     public void analyze(Proposal proposal) {
         try {
-            boolean approved = calculationList.stream()
-                    .mapToInt(impl -> impl.calculate(proposal)).sum() > 350;
+            int points = calculationList.stream()
+                    .mapToInt(impl -> impl.calculate(proposal)).sum();
 
-            proposal.setStatus(approved);
+            proposal.setStatus(points > 350);
         } catch (StrategyException ex) {
             proposal.setStatus(false);
+            proposal.setDescription(ex.getMessage());
         }
 
-
+        rabbitNotificationService.notify(exchangeCompletedProposal, proposal);
 
     }
 }
