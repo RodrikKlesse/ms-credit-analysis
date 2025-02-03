@@ -5,7 +5,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AnalysisProposalListener {
+public class ProposalAnalysisListener {
 
     @RabbitListener(queues = "rabbitmq.queue.pending.proposal")
     public void analysisProposal(Proposal proposal) {

@@ -2,7 +2,9 @@ package org.klesse.service.strategy.impl;
 
 import org.klesse.domain.Proposal;
 import org.klesse.service.strategy.interfaces.Calculation;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IncomeCheckImpl implements Calculation {
 
     @Override

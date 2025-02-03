@@ -2,11 +2,14 @@ package org.klesse.service.strategy.impl;
 
 import lombok.AllArgsConstructor;
 import org.klesse.domain.Proposal;
+import org.klesse.exceptions.StrategyException;
 import org.klesse.service.strategy.interfaces.Calculation;
 import org.klesse.service.strategy.interfaces.CreditCheckProvider;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
+@Order(1)
+@Component
 @AllArgsConstructor
 public class CreditDeniedImpl implements Calculation {
 
@@ -15,7 +18,7 @@ public class CreditDeniedImpl implements Calculation {
     @Override
     public int calculate(Proposal proposal) {
         if(creditCheckProvider.isCreditDenied()) {
-            throw new RuntimeException("You do note have credit release");
+            throw new StrategyException("You do not have credit release");
         }
         return 100;
     }

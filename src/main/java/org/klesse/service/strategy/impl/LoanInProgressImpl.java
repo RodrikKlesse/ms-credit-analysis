@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.klesse.domain.Proposal;
 import org.klesse.service.strategy.interfaces.Calculation;
 import org.klesse.service.strategy.interfaces.LoanCheckProvider;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor
 public class LoanInProgressImpl implements Calculation {
 

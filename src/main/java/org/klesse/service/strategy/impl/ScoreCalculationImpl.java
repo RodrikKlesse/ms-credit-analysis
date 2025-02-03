@@ -2,9 +2,14 @@ package org.klesse.service.strategy.impl;
 
 import lombok.AllArgsConstructor;
 import org.klesse.domain.Proposal;
+import org.klesse.exceptions.StrategyException;
 import org.klesse.service.strategy.interfaces.Calculation;
 import org.klesse.service.strategy.interfaces.ScoreProvider;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
+@Order(2)
+@Component
 @AllArgsConstructor
 public class ScoreCalculationImpl implements Calculation {
     public static final int MINIMUM_SCORE = 200;
@@ -19,7 +24,7 @@ public class ScoreCalculationImpl implements Calculation {
         int score = scoreProvider.getScore();
 
         if (score <= MINIMUM_SCORE) {
-            throw new RuntimeException("Does not have the minimum score.");
+            throw new StrategyException("Does not have the minimum score.");
         }
 
         return getScoreBasedOnThreshold(score);
