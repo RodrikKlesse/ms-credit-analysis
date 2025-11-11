@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.klesse.contants.MessageConstant.CREDIT_APPROVED;
+
 @Service
 public class CreditAnalysisService {
 
@@ -30,6 +32,7 @@ public class CreditAnalysisService {
                     .mapToInt(impl -> impl.calculate(proposal)).sum();
 
             proposal.setStatus(points > 350);
+            proposal.setDescription(CREDIT_APPROVED);
         } catch (StrategyException ex) {
             proposal.setStatus(false);
             proposal.setDescription(ex.getMessage());
